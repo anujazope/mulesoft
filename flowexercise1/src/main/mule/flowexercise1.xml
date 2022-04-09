@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f6866e7d-da0d-4314-8589-f8c019c5b8e9" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="ad68f11d-9fdb-4f79-b005-67378f8b1083" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="1234" database="mule" />
+	</db:config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="d7a03473-e09b-4e0c-b2fa-6897b3d72e7b" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="flowexercise1Flow" doc:id="9aa845a6-5229-4da4-a3b7-27936ee53db8" >
+		<http:listener doc:name="Listener" doc:id="f89bfc5f-8ce4-499b-abce-cb360fa961cf" config-ref="HTTP_Listener_config" path="/exercise1"/>
+		<set-variable value="#[attributes.queryParams.name]" doc:name="customerName" doc:id="f29af8b3-e35f-4d22-a45a-798460aac173" variableName="name"/>
+		<set-variable value="#[attributes.queryParams.location]" doc:name="customerLocation" doc:id="91d8ec70-33da-402d-b533-1501ffc3dcf8" variableName="location"/>
+		<set-payload value="#['Welcome ' ++ message.attributes.queryParams.name as String&#10;	++ ',Your Location is ' ++ attributes.queryParams.location as String]" doc:name="Set Payload" doc:id="dccfe2b7-0d03-4bde-a3ea-333eddbd9a6a" />
+	</flow>
+	<flow name="flowexercise2Flow1" doc:id="dab9edbc-37f6-4e44-be32-7ae9d5bca1e3" >
+		<http:listener doc:name="Listener" doc:id="653263df-9f9c-4d2f-88c0-667a9d97b12c" config-ref="HTTP_Listener_config" path="/exercise2"/>
+		<set-payload value="#[upper('Welcome ' ++ message.attributes.queryParams.name as String&#10;	++ ',Your Location is ' ++ attributes.queryParams.location as String&#10;)]" doc:name="Set Payload" doc:id="5ff29f41-5af2-42b2-8dce-b065c3cc9f30" />
+		<logger level="INFO" doc:name="Logger" doc:id="acee75cd-228d-432b-89cf-01dac3b16ebe" />
+	</flow>
+	<flow name="flowexercise3Flow2" doc:id="16bb1912-acbc-4681-a322-a609aba0dfa6" >
+		<http:listener doc:name="Listener" doc:id="af79c2fe-db0c-4928-b81c-1940989d6007" config-ref="HTTP_Listener_config" path="/exercise3"/>
+		<set-variable value="#[attributes.queryParams.name]" doc:name="Set Variable" doc:id="6e43cf33-8279-4132-885d-4c609e833bdb" variableName="name"/>
+		<set-payload value="#[upper('Welcome ' ++ message.attributes.queryParams.name as String&#10;	++ ',Your Location is ' ++ (attributes.queryParams.location default 'india'))]" doc:name="Set Payload" doc:id="2a93f8a4-8e8c-417f-a1af-487285cbe05e" />
+		<logger level="INFO" doc:name="Logger" doc:id="d4103371-6fc0-47dd-9752-68193e2a5d4e" message="get/set"/>
+	</flow>
+	<flow name="flowexercise5Flow1" doc:id="6e764a28-13af-4fff-888b-607397de6038" >
+		<http:listener doc:name="Listener" doc:id="dc69beb0-0bfe-453d-851f-59a76bd24975" config-ref="HTTP_Listener_config" path="/exercise4"/>
+		<set-variable value="#[attributes.queryParams.firstname]" doc:name="Set Variable" doc:id="b362aaaa-a1fa-4c8b-a8b0-6804bafdd73f" variableName="firstname"/>
+		<set-payload value="#['Welcome ' ++ vars.firstname]" doc:name="Set Payload" doc:id="b36ce9f1-a3ae-4439-9082-97936cd63bf9" />
+	</flow>
+</mule>
